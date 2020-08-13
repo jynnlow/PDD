@@ -1,5 +1,3 @@
-from app.models.user import User
-
 class State:
     __userList = []
     __appointmentList = []
