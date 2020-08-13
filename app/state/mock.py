@@ -7,13 +7,13 @@ class Mock:
         State.addUser(
             Dentist(
                 id = 1,
-                username = "leekahwei009",
-                password = "1234567890",
-                fullName = "Lee Kah Wei",
-                nric = "960411075647",
-                gender = "Male",
-                contactNumber = "0124912446",
-                address = "50-6-10, Taman Sri Hijau, Jalan Van Praagh, 11600, Penang, Malaysia"
+                username = "jynnlow99",
+                password = "04110203",
+                fullName = "Low Yee Jiun",
+                nric = "990203075164",
+                gender = "Female",
+                contactNumber = "0125822587",
+                address = "26, Loring Teratai Indah 4,Taman Teratai Indah, 13400,Penang, Malaysia"
             )
         )
 

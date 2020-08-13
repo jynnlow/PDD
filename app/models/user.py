@@ -12,14 +12,29 @@ class User:
         self.address = address
         self.role = role
 
-    def login (id,password):
-        # is id and password correct?
-        # if it's correct then
-        State.LogonUser(id)
+    def login (username,password):
+        for user in State.getUserList():
+            if user.username == username :
+                if user.password == password:
+                    State.logonUser(user.id, True)
+                    break
+                else: 
+                    State.logonUser(0, False)
+                    break
+            else: 
+                 State.logonUser(0, False)
+        return State.getLogonUser()
+        
 
     def logout():
-        State.LogonUser(0)
-        print("")
+        State.logonUser(0,False)
+        return State.getLogonUser()
+
+    def register (id,username,password,fullName,nric,gender,contactNumber,address,role):
+        newUser = User(id,username,password,fullName,nric,gender,contactNumber,address,role)
+        State.addUser(newUser)
+
+
     
 
 
