@@ -1,19 +1,25 @@
+from app.models.appointment import Appointment
 from app.models.customer import Customer
 from app.models.dentist import Dentist
 from app.state.state import State
-from app.state.mock import Mock
 from app.models.user import User
+from app.sharedkernel.general import General
+from datetime import date
+from pprint import pprint
+# Mocks
+from mocks.appointment import AppointmentMock
+from mocks.user import UserMock
 
 def main():
-    Mock.mockUsers()
-    # for user in State.getUserList():
-    #     print(user.role)
+    AppointmentMock.mockAppointments()
+    print(Appointment.createAppointment(20200815,3))
+    # Mock.mockUsers()
+    # Mock.mockAppointments()
+    # today = date.today()
+    # changeFormat = today.strftime("%Y%m%d")
+    # print("Today is", today)
+    # print(changeFormat)
+    # pprint(Appointment.getAppointmentSlotOptions())
     
-    username = "jynnlow99"
-    password = "04110203"
-    returnMessage = User.logout()
-    print(returnMessage)
-    
-
 if __name__ == "__main__":
     main()

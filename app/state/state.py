@@ -5,6 +5,10 @@ class State:
         "user_id" : 0,
         "message" : ""
     }
+    __cancelStatus = {
+        "appointment_id" : 0,
+        "message" : ""
+    }
 
     def getUserList():
         return State.__userList
@@ -22,6 +26,15 @@ class State:
     def addAppointment(Appointment):
         State.__appointmentList.append(Appointment)
 
-    def getAppointmentList(user_id):
-        return State.__appointmentList
+    def getAppointmentList():
+        filteredAppointments = []
+        for appointment in State.__appointmentList: 
+            if appointment.cancel == False:
+                filteredAppointments.append(appointment)
+        return filteredAppointments
+
+
+   
+    
         
+    
