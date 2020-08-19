@@ -1,7 +1,7 @@
 from app.state.state import State
 from app.models.user import User
 from pprint import pprint
-from datetime import date
+from datetime import date, timedelta
 
 class Appointment:
     __appointment_slot = {
@@ -41,18 +41,24 @@ class Appointment:
         for appointment in State.getAppointmentList():
             if appointment.date == date and appointment.timeslot == timeslot:
                 ableToCreate = False
-                break
-        
+                break    
         newAppointment = Appointment()
         State.addAppointment(newAppointment)
-
         return ableToCreate
 
     def viewAppointmentsStatus(user_id):
         appointmentList = []
         for appointment in State.getAppointmentList():
             if appointment.user_id == user_id:
-                appointmentList.append(appointment)
+                appointment_dict = {
+                    "date": appointment.date,
+                    "timeslot": Appointment.__appointment_slot[appointment.timeslot],
+                    "dentist": appointment.dentist,
+                    "treatment": appointment.treatment,
+                    "status": appointment.status
+                }
+                appointmentList.append(appointment_dict)
+        appointmentList.sort(key = lambda appointment: appointment["date"])
         return appointmentList
 
     def cancelAppointment(appointment_id):
@@ -74,10 +80,13 @@ class Appointment:
         return appointmentList
                            
     def updateAppointmentStatus(appointment_id,status):
-         for appointment in State.getAppointmentList():
+        appointmentList = []
+        for appointment in State.getAppointmentList():
             if appointment.id == appointment_id:
                 appointment.status = status
-                break
+                appointmentList.append()
+                break 
+        return appointmentList
 
     def insertRemark(appointment_id,remark):
         for appointment in State.getAppointmentList():
@@ -109,12 +118,29 @@ class Appointment:
     def getAppointmentSlotOptions():
         return Appointment.__appointment_slot
 
+    def getAppointmentSlotReverse():
+        appointment_slot = {}
+        i = 1
+        while i <= 16 :
+            appointment_slot[Appointment.__appointment_slot[i]] = i
+            i+=1
+        return appointment_slot
+
     def viewAppointmentsByDate():
         appointmentList = State.getAppointmentList()
         appointmentList.sort(key = lambda appointment: appointment.date)
         return appointmentList
 
-
+    def view7daysAppointmentCalendar():
+        appointmentList = []
+        for i in range (1,7):
+            currentDay = (date.today() + timedelta(days=i)).strftime("%Y%m%d")
+            for appointment in State.getAppointmentList():
+                if appointment.date == currentDay:
+                    appointmentList.append(appointment)     
+        appointmentList.sort(key = lambda appointment: appointment.date)
+        return 
+        
     # LEARN FILTER FUNCTIONS
     # def filteredAppointmentsByDate(appointment):
     #             if appointment.date == date:

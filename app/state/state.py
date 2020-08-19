@@ -33,6 +33,13 @@ class State:
                 filteredAppointments.append(appointment)
         return filteredAppointments
 
+    def getAppointmentByID(appointment_ID):
+        filteredAppointments = []
+        for appointment in State.__appointmentList: 
+            if appointment.cancel == False and appointment.id == appointment_ID:
+                filteredAppointments.append(appointment)
+        return filteredAppointments
+
 
    
     
