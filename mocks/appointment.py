@@ -5,129 +5,131 @@ class AppointmentMock:
     def mockAppointments():
         State.addAppointment(
             Appointment (
-                id = "A0001",
-                user_id = 100,
-                cancel = False,
                 customer_name = "Lee Kah Wei",
                 customer_nric = "960411075647",
                 dentist = "Dr. Ong",
                 treatment = "Fillings",
                 date = 20200815,
                 timeslot = 1,
-                remark = "",
-                status = "Pending"                 
+                status = "Pending",
+                user_id = 4                 
             )
         )
 
         State.addAppointment(
             Appointment (
-                id = "A0002",
-                user_id = 100,
-                cancel = False,
                 customer_name = "Lee Kah Wei",
                 customer_nric = "960411075647",
                 dentist = "Dr. Stanley",
                 treatment = "Fillings",
                 date = 20200813,
                 timeslot = 3,
-                remark = "",
-                status = "Completed"   
+                status = "Completed",
+                user_id = 4   
             )
         )
 
         State.addAppointment(
             Appointment (
-                id = "A0003",
-                user_id = 100,
-                cancel = False,
                 customer_name = "Lee Kah Wei",
                 customer_nric = "960411075647",
                 dentist = "Dr. Stanley",
-                treatment = "Extraction",
+                treatment = "Extractions",
                 date = 20200816,
                 timeslot = 2,
-                remark = "",
-                status = "Pending"   
+                status = "Pending",
+                user_id = 4   
             )
         )
 
         State.addAppointment(
             Appointment (
-                id = "A0004",
-                user_id = 101,
-                cancel = False,
                 customer_name = "Lee Min Er",
                 customer_nric = "9604155689",
                 dentist = "Dr. Stanley",
-                treatment = "Extraction",
+                treatment = "Extractions",
                 date = 20200815,
                 timeslot = 10,
-                remark = "",
-                status = "Confirmed"   
+                status = "Confirmed",
+                user_id = 5
             )
         )
 
         State.addAppointment(
             Appointment (
-                id = "A0005",
-                user_id = 101,
-                cancel = False,
                 customer_name = "Lee Min Er",
                 customer_nric = "9604155689",
                 dentist = "Dr. Stanley",
                 treatment = "Teeth Cleaning",
                 date = 20200813,
                 timeslot = 4,
-                remark = "",
-                status = "No-show"   
+                status = "No-show",
+                user_id = 5
             )
         )
 
         State.addAppointment(
             Appointment (
-                id = "A0006",
-                user_id = 101,
-                cancel = False,
                 customer_name = "Lee Min Er",
                 customer_nric = "9604155689",
                 dentist = "Dr. Stanley",
                 treatment = "Denture",
                 date = 20200817,
                 timeslot = 7,
-                remark = "",
-                status = "Pending"   
+                status = "Pending",
+                user_id = 5
             )
         )
 
         State.addAppointment(
             Appointment (
-                id = "A0007",
-                user_id = 102,
-                cancel = False,
                 customer_name = "Tan Yun Ching",
                 customer_nric = "964123589646",
                 dentist = "Dr. Stanley",
                 treatment = "Denture",
                 date = 20200815,
                 timeslot = 8,
-                remark = "",
-                status = "Pending"   
+                status = "Pending",
+                user_id = 6
             )
         )
 
         State.addAppointment(
             Appointment (
-                id = "A0008",
-                user_id = 102,
-                cancel = False,
                 customer_name = "Tan Yun Ching",
                 customer_nric = "964123589646",
                 dentist = "Dr. Ong",
-                treatment = "repairs",
+                treatment = "Repairs",
                 date = 20200814,
                 timeslot = 13,
-                remark = "",
-                status = "Completed"   
+                status = "Completed",
+                user_id = 6
+            )
+        )
+
+        State.addAppointment(
+            Appointment (
+                customer_name = "Tan Yun Ching",
+                customer_nric = "964123589646",
+                dentist = "Dr. Ong",
+                treatment = "Repairs",
+                date = 20200823,
+                timeslot = 13,
+                status = "Pending",
+                user_id = 6
+            )
+        )
+
+        State.addAppointment(
+            Appointment (
+                customer_name = "Tan Yun Ching",
+                customer_nric = "964123589646",
+                dentist = "Dr. Ong",
+                treatment = "Denture",
+                date = 20200823,
+                timeslot = 13,
+                status = "Pending",
+                user_id = 6
             )
         )
 

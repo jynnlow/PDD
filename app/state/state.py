@@ -3,7 +3,8 @@ class State:
     __appointmentList = []
     __loginState = {
         "user_id" : 0,
-        "message" : ""
+        "message" : "",
+        "role": ""
     }
     __cancelStatus = {
         "appointment_id" : 0,
@@ -16,9 +17,10 @@ class State:
     def addUser(User):
         State.__userList.append(User)
 
-    def logonUser(user_id, message):
+    def logonUser(user_id, message, role):
         State.__loginState["user_id"] = user_id
         State.__loginState["message"] = message
+        State.__loginState["role"] = role
     
     def getLogonUser():
         return State.__loginState

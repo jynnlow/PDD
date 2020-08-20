@@ -46,7 +46,7 @@ class UserMock:
 
         State.addUser(
             Customer(
-                id = 100,
+                id = 4,
                 username = "leekahwei100",
                 password = "100100100",
                 fullName = "Lee Kah Wei",
@@ -59,7 +59,7 @@ class UserMock:
 
         State.addUser(
             Customer(
-                id = 101,
+                id = 5,
                 username = "leeminer101",
                 password = "101101101",
                 fullName = "Lee Min Er",
@@ -72,7 +72,7 @@ class UserMock:
 
         State.addUser(
             Customer(
-                id = 102,
+                id = 6,
                 username = "tanyunching102",
                 password = "102102102",
                 fullName = "Tan Yun Ching",
@@ -85,7 +85,7 @@ class UserMock:
 
         State.addUser(
             Customer(
-                id = 103,
+                id = 7,
                 username = "evonkoay103",
                 password = "103103103",
                 fullName = "Koay Evon",
@@ -98,7 +98,7 @@ class UserMock:
 
         State.addUser(
             Customer(
-                id = 104,
+                id = 8,
                 username = "leeyee104",
                 password = "104104104",
                 fullName = "Low Lee Yee",
@@ -111,7 +111,7 @@ class UserMock:
 
         State.addUser(
             Customer(
-                id = 105,
+                id = 9,
                 username = "yuetyin105",
                 password = "105105105",
                 fullName = "Ng Yuet Yin",
@@ -124,7 +124,7 @@ class UserMock:
 
         State.addUser(
             Customer(
-                id = 106,
+                id = 10,
                 username = "evelyn106",
                 password = "106106106",
                 fullName = "Evelyn Low",

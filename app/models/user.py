@@ -16,13 +16,13 @@ class User:
         for user in State.getUserList():
             if user.username == username :
                 if user.password == password:
-                    State.logonUser(user.id, True)
+                    State.logonUser(user.id, True, user.role)
                     break
                 else: 
-                    State.logonUser(0, False)
+                    State.logonUser(0, False, "")
                     break
             else: 
-                 State.logonUser(0, False)
+                 State.logonUser(0, False, "")
         return State.getLogonUser()
         
 
@@ -30,10 +30,7 @@ class User:
         State.logonUser(0,False)
         return State.getLogonUser()
 
-    def register (id,username,password,fullName,nric,gender,contactNumber,address,role):
-        newUser = User(id,username,password,fullName,nric,gender,contactNumber,address,role)
-        State.addUser(newUser)
-
+   
 
     
 

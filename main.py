@@ -17,6 +17,6 @@ def main():
     AppointmentMock.mockAppointments()
     UserMock.mockUsers()
     GUI.main()
-
+    
 if __name__ == "__main__":
     main()
