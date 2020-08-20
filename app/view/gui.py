@@ -1,5 +1,6 @@
 from app.models.appointment import Appointment
 from app.sharedkernel.general import General
+from app.models.user import User
 from tkinter import *
 import tkinter as tk
 from datetime import date
@@ -8,7 +9,7 @@ class DentistApp(tk.Tk):
     def __init__(self):
         tk.Tk.__init__(self)
         self._frame = None
-        self.switch_frame(NursePage)
+        self.switch_frame(MainPage)
 
     def switch_frame(self, frame_class):
         """Destroys current frame and replaces it with a new one."""
@@ -17,6 +18,7 @@ class DentistApp(tk.Tk):
             self._frame.destroy()
         self._frame = new_frame
         self._frame.grid()
+
 
 class MainPage(tk.Frame):
     def __init__(self, master):
@@ -40,7 +42,7 @@ class MainPage(tk.Frame):
         entry_registerNRIC = tk.Entry(self)
         entry_registerContact = tk.Entry(self)
         entry_registerAddress = tk.Entry(self) 
-        button_login = tk.Button(self, text = "  Login  ", font = ("Courier",15),fg = "black", height = 2, command = lambda: master.switch_frame(CustomerPage))
+        button_login = tk.Button(self, text = "  Login  ", font = ("Courier",15),fg = "black", height = 2, command = lambda: User.login(entry_loginUsername.get(), entry_loginPassword()))
         button_register = tk.Button(self, text = "  Register Here!   ", font = ("Courier",15),fg = "black", height = 2) 
         gender = tk.StringVar()
         radioButton_female = tk.Radiobutton(self, text = "Female              ", variable = gender, value = "Female")
