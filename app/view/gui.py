@@ -512,7 +512,7 @@ class NursePage(tk.Frame):
         label_dentistPage = tk.Label(self, text = "Nurse Page", font = ("Courier",20),fg = "grey")
         label_ajustment = tk.Label(self, text = "                        ")
         label_generateSummary = tk.Label(self, text = "Generate Summary: ", font = ("Courier",18),fg = "black")
-        button_viewAllAppointment = tk.Button(self, text = "View All Appointment", font = ("Courier",18), fg = "black", height = 2, width = 40, command = lambda: master.switch_frame(ViewAllAppointmentPageNurse))
+        # button_viewAllAppointment = tk.Button(self, text = "View All Appointment", font = ("Courier",18), fg = "black", height = 2, width = 40, command = lambda: master.switch_frame(ViewAllAppointmentPageNurse))
         button_overwriteAppointmentStatus = tk.Button(self, text = "Overwrite Appointment Status", font = ("Courier",18), fg = "black", height = 2, width = 40, command = lambda: master.switch_frame(OverwriteAppointmentStatus))
         button_generateSummaryByName = tk.Button(self, text = "By Customer's Name", font = ("Courier",18), fg = "black", height = 2, width = 40, command = lambda: master.switch_frame(GenerateSummaryByName))
         button_generateSummaryByIC = tk.Button(self, text = "By Customer's NRIC", font = ("Courier",18), fg = "black", height = 2, width = 40, command = lambda: master.switch_frame(GenerateSummaryByIC))
@@ -521,7 +521,7 @@ class NursePage(tk.Frame):
         #widget Positioning
         label_ajustment.grid(row = 0, column = 0)
         label_dentistPage.grid(row = 0, column = 1, sticky = tk.W, padx = 10, pady = 10)
-        button_viewAllAppointment.grid(row = 2, column = 1, sticky = tk.W, padx = 10, pady = 10)
+        # button_viewAllAppointment.grid(row = 2, column = 1, sticky = tk.W, padx = 10, pady = 10)
         button_overwriteAppointmentStatus.grid(row = 3, column = 1, sticky = tk.W, padx = 10, pady = 10)
         button_generateSummaryByName.grid(row = 5, column = 1, sticky = tk.W, padx = 10, pady = 10)
         button_generateSummaryByIC.grid(row = 6, column = 1, sticky = tk.W, padx = 10, pady = 10)
