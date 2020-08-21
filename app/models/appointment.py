@@ -61,6 +61,18 @@ class Appointment:
                 appointmentList.append(appointment_dict)
         appointmentList.sort(key = lambda appointment: appointment["date"])
         return appointmentList
+    
+    def view7daysAppointmentCalendar():
+        appointmentList = []
+        for i in range (1,7):
+            currentDay = int((date.today() + timedelta(days=i)).strftime("%Y%m%d"))
+            for appointment in State.getAppointmentList():
+                if appointment.date == currentDay:
+                    appointment_dict = vars(appointment)
+                    appointment_dict["timeslot_time"] = Appointment.__appointment_slot[appointment.timeslot]
+                    appointmentList.append(appointment_dict)
+        appointmentList.sort(key = lambda appointment: appointment["date"])
+        return appointmentList
 
     def cancelAppointment(appointment_id):
         cancelStatus = False
@@ -85,9 +97,17 @@ class Appointment:
             if appointment.id == appointment_id:
                 appointment.status = status
                 appointment.remark = remark
-                appointmentList.append()
+                appointmentList.append(appointment)
                 break 
         return appointmentList
+
+    def getAppointmentStatus(appointment_id):
+        result = False
+        for appointment in State.getAppointmentList():
+            if appointment.id == appointment_id:
+                result = True
+                break
+        return result
 
     def generateAppointmentSummaryByCustomerName(customer_name):
         appointmentList = []
@@ -137,18 +157,13 @@ class Appointment:
         appointmentList.sort(key = lambda appointment: appointment["date"])
         return appointmentList       
 
-    def view7daysAppointmentCalendar():
-        appointmentList = []
-        for i in range (1,7):
-            currentDay = int((date(2020,8,13) + timedelta(days=i)).strftime("%Y%m%d"))
-            # currentDay = int((date.today() + timedelta(days=i)).strftime("%Y%m%d"))
-            for appointment in State.getAppointmentList():
-                if appointment.date == currentDay:
-                    appointment_dict = vars(appointment)
-                    appointment_dict["timeslot_time"] = Appointment.__appointment_slot[appointment.timeslot]
-                    appointmentList.append(appointment_dict)
-        appointmentList.sort(key = lambda appointment: appointment["date"])
-        return appointmentList
+    def appointmentDate(date):
+        result = False
+        for appointment in State.getAppointmentList():
+            if appointment.date == date:
+                result = True
+                break
+        return result
         
     def viewTotalCustomersByTypes():
         totalCustomersByTypes = {
@@ -159,11 +174,9 @@ class Appointment:
             "Denture": []
         }
         returnData = []
-
         for appointment in State.getAppointmentList():
             if(appointment.user_id not in totalCustomersByTypes[appointment.treatment]):
-                totalCustomersByTypes[appointment.treatment].append(appointment.user_id)
-        
+                totalCustomersByTypes[appointment.treatment].append(appointment.user_id)       
         for appointmentTypes in totalCustomersByTypes:
             returnData.append(
                 {
@@ -172,23 +185,3 @@ class Appointment:
                 }
             )
         return returnData
-
-    # LEARN FILTER FUNCTIONS
-    # def filteredAppointmentsByDate(appointment):
-    #             if appointment.date == date:
-    #                 return True
-    #             else:
-    #                 return False
-
-    #         filteredAppointmentList = filter(filteredAppointmentsByDate, State.getAppointmentList())
-            
-    #         def filteredAppoinmentsBySlot(appointment):
-    #             if appointment.timeslot == timeslot:
-    #                 return True
-    #             else:
-    #                 return False
-            
-    #         filteredAppointmentList = filter(filteredAppoinmentsBySlot, filteredAppointmentList)
-            
-    #         if len(list(filteredAppointmentList)) == 0:
-    #             ableToCreate = True

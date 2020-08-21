@@ -23,7 +23,6 @@ class Customer(User):
             if user.id == user_id:
                 full_name = user.fullName
                 nric = user.nric
-
         return full_name, nric
 
     def makeAppointment():

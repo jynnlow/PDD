@@ -14,7 +14,7 @@ class DentistApp(tk.Tk):
     def __init__(self):
         tk.Tk.__init__(self)
         self._frame = None
-        self.switch_frame(CustomerPage)
+        self.switch_frame(GenerateSummaryByIC)
 
     def switch_frame(self, frame_class):
         """Destroys current frame and replaces it with a new one."""
@@ -171,12 +171,11 @@ class MakeAppointmentPage(tk.Frame):
             treatment=treatment,
             date=date,
             timeslot=timeslot,
-        )
-        
+        )       
         if result == True:
             messagebox.showinfo("SUCCESSFUL", "Congratulation! Your appointment is successfully made!")
         else: 
-            messagebox.showerror("MAKE APPOINTMENT FAILED", "Something Error")
+            messagebox.showerror("MAKE APPOINTMENT FAILED", "Error: Only allowed book an appointment timeslot that is haven't booked by other customer. (refer to calendar)")
 
 class ViewAppointmentStatusPage(tk.Frame):
     def __init__(self, master):
@@ -241,7 +240,7 @@ class CancelAppointmentPage(tk.Frame):
         if cancelResult == True:
             messagebox.showinfo("SUCCESSFUL", "Congratulation! Your appointment is cancel successfully!")
         else: 
-            messagebox.showerror("FAILED", "Something Error")
+            messagebox.showerror("FAILED", "Cancel unsuccessful. Please check on the criteria above. (with red)")
 
 class CalendarPage(tk.Frame):
     def __init__(self, master):
@@ -369,7 +368,7 @@ class UpdateAppointmentStatusPage(tk.Frame):
         label_remark = tk.Label(self, text = "Remark: ", font = ("Courier",14),fg = "black")
         entry_remark = tk.Entry(self)
         button_back = tk.Button(self, text = "Back", font = ("Courier",15), fg = "grey", height = 2, width = 6, command = lambda: master.switch_frame(DentistPage))       
-        button_submitAppointment = tk.Button(self, text = "Sumbit", font = ("Courier",15), fg = "black", height = 2, width = 8, command = lambda: Appointment.updateAppointmentStatus(int(entry_updateApointmentStatusID.get()), updateStatus.get(),entry_remark.get()))
+        button_submitAppointment = tk.Button(self, text = "Sumbit", font = ("Courier",15), fg = "black", height = 2, width = 8, command = lambda: self.submitID(int(entry_updateApointmentStatusID.get()), updateStatus.get(),entry_remark.get()))
         #widget Positioning
         label_updateAppointmentStatus.grid(columnspan = 7,row = 0, column = 1, sticky = tk.W, padx = 15, pady = 5)
         label_updateAppointmentStatusIDInfo.grid(columnspan = 7,row = len(data)+2, column = 1, sticky = tk.W, padx = 15, pady = 5 )
@@ -383,6 +382,16 @@ class UpdateAppointmentStatusPage(tk.Frame):
         button_back.grid(columnspan = 7,row = len(data)+7, column = 1, sticky = tk.W, padx = 10, pady = 5)
         button_submitAppointment.grid(columnspan = 7,row = len(data)+7, column = 1, sticky = tk.E, padx = 10, pady = 5)
 
+    def submitID(self, appointment_id, status, remark):
+        appointmentList = Appointment.viewAppointmentsByStatusPending()
+        for appointment in appointmentList:
+           if appointment["id"] == appointment_id:
+                Appointment.updateAppointmentStatus(appointment_id,status,remark)
+                messagebox.showinfo("SUCCESS", "Update Successfully")
+                break
+        else:
+            messagebox.showinfo("FAILED", "Please make you insert correct appointment id (must be pending appointment!")
+
 class ViewAppointmentByDatePage(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
@@ -390,16 +399,23 @@ class ViewAppointmentByDatePage(tk.Frame):
         label_viewAppointmentStatusByDate = tk.Label(self, text = "View Appointment By Date", font = ("Courier",20),fg = "grey")
         label_viewAppointmentStatusByDateInfo = tk.Label(self, text = "Please enter a date that you wish to view and update: ",font = ("Courier",15),fg = "black" )
         entry_date = tk.Entry(self)   
-        label_ajustment = tk.Label(self, text = "")
         label_alert = tk.Label(self, text = "Date Format: YYYYMMDD (etc: 20200931)", font = ("Courier",10),fg = "red")
-        button_submit = tk.Button(self, text = "Sumbit", font = ("Courier",15), fg = "black", height = 1, width = 8, command = lambda: self.updatePanel(master, entry_date.get()))
+        button_submit = tk.Button(self, text = "Sumbit", font = ("Courier",15), fg = "black", height = 2, width = 8, command = lambda: self.submitDate(master, int(entry_date.get())))
+        button_back = tk.Button(self, text = "Back", font = ("Courier",15), fg = "grey", height = 2, width = 6, command = lambda: master.switch_frame(DentistPage))       
         #widget positioning
         label_viewAppointmentStatusByDate.grid(columnspan=5, row = 0, column = 1, sticky = tk.W, padx = 15, pady = 5)
         label_viewAppointmentStatusByDateInfo.grid(columnspan=5, row = 1, column = 1, sticky = tk.W, padx = 15, pady = 5 )
         entry_date.grid(columnspan=5, row = 2, column = 1, sticky = tk.S, padx = 15, pady = 5)
         label_alert.grid(columnspan=5, row = 3, column = 1, sticky = tk.N, padx = 10, pady = 0)
-        label_ajustment.grid(columnspan=5, row = 0, column = 0, sticky = tk.W, padx = 15, pady = 5)
         button_submit.grid(columnspan=5, row = 2, column = 1, sticky = tk.E, padx = 15, pady = 5)
+        button_back.grid(columnspan=5, row = 4, column = 1, sticky = tk.W, padx = 10, pady = 5)
+
+    def submitDate(self, master, date):
+        result = Appointment.appointmentDate(date)
+        if result == False:
+            messagebox.showinfo("FAILED", "Date does not exists!")
+        else: 
+            self.updatePanel(master,date)
 
     def updatePanel(self, master, date):
         data = [
@@ -423,7 +439,7 @@ class ViewAppointmentByDatePage(tk.Frame):
                 else:
                     self.e = Entry(self, width=15, fg="black", font=("Courier", 11))
                 if j == "id" or j == "date" or j == "timeslot_time" or j == "customer_name" or j == "customer_nric" or j == "dentist" or j == "treatment" or j == "status":
-                    self.e.grid(row=i+4, column=k, sticky = tk.N)
+                    self.e.grid(row=i+6, column=k, sticky = tk.N)
                     self.e.insert(tk.INSERT, data[i][j])
                     self.e.configure(state="readonly")
                 k+=1
@@ -435,16 +451,14 @@ class ViewAppointmentByDatePage(tk.Frame):
         entry_updateApointmentStatusID = tk.Entry(self)    
         label_updatedStatus = tk.Label(self, text = "Updated Status: ", font = ("Courier",14),fg = "black")
         optionMenu_updateStatus = OptionMenu(self, updateStatus, "Completed", "No-show")
-        button_back = tk.Button(self, text = "Back", font = ("Courier",15), fg = "grey", height = 2, width = 6, command = lambda: master.switch_frame(DentistPage))       
+        
         button_submitAppointment = tk.Button(self, text = "Sumbit", font = ("Courier",15), fg = "black", height = 2, width = 8, command = lambda: Appointment.updateAppointmentStatus(int(entry_updateApointmentStatusID.get()), updateStatus.get())) 
-        label_updateAppointmentStatusIDInfo.grid(columnspan=5, row = len(data)+5, column = 1, sticky = tk.W, padx = 15, pady = 5 )
-        label_updateAppointmentStatusID.grid(columnspan=5, row = len(data)+6, column = 1, sticky = tk.W, padx = 15, pady = 5)
-        entry_updateApointmentStatusID.grid(columnspan=5, row = len(data)+6, column = 1, sticky = tk.N, padx = 15, pady = 5)
-        label_updatedStatus.grid(columnspan=5, row = len(data)+7, column = 1, sticky = tk.W, padx = 15, pady = 5)
-        optionMenu_updateStatus.grid(columnspan=5, row = len(data)+7, column = 1, sticky = tk.N, padx = 15, pady = 5)
-        # label_ajustment.grid(columnspan=5, row = len(data)+8, column = 0, sticky = tk.W, padx = 15, pady = 5)
-        button_back.grid(columnspan=5, row = len(data)+9, column = 1, sticky = tk.W, padx = 10, pady = 5)
-        button_submitAppointment.grid(columnspan=5, row = len(data)+9, column = 1, sticky = tk.E, padx = 10, pady = 5)
+        label_updateAppointmentStatusIDInfo.grid(columnspan=5, row = len(data)+7, column = 1, sticky = tk.W, padx = 15, pady = 5 )
+        label_updateAppointmentStatusID.grid(columnspan=5, row = len(data)+8, column = 1, sticky = tk.W, padx = 15, pady = 5)
+        entry_updateApointmentStatusID.grid(columnspan=5, row = len(data)+8, column = 1, sticky = tk.N, padx = 15, pady = 5)
+        label_updatedStatus.grid(columnspan=5, row = len(data)+9, column = 1, sticky = tk.W, padx = 15, pady = 5)
+        optionMenu_updateStatus.grid(columnspan=5, row = len(data)+9, column = 1, sticky = tk.N, padx = 15, pady = 5)        
+        button_submitAppointment.grid(columnspan=5, row = len(data)+11, column = 1, sticky = tk.E, padx = 10, pady = 5)
 
 class OverwriteAppointmentStatus(tk.Frame):
     def __init__(self, master):
@@ -477,7 +491,7 @@ class OverwriteAppointmentStatus(tk.Frame):
         updateStatus = StringVar()
         updateStatus.set("Pending")
         #Widget Creation
-        label_updateAppointmentStatus = tk.Label(self, text = "Update Appointment Status", font = ("Courier",20),fg = "grey")
+        label_updateAppointmentStatus = tk.Label(self, text = "Overwrite Appointment Status", font = ("Courier",20),fg = "grey")
         label_updateAppointmentStatusIDInfo = tk.Label(self, text = "Please enter the appointment id that you wish to update: ",font = ("Courier",15),fg = "black" )
         label_updateAppointmentStatusID = tk.Label(self, text = "Appointment ID: ", font = ("Courier",14),fg = "black")
         label_updatedStatus = tk.Label(self, text = "Updated Status: ", font = ("Courier",14),fg = "black")
@@ -485,7 +499,7 @@ class OverwriteAppointmentStatus(tk.Frame):
         label_ajustment = tk.Label(self, text = "    ")
         optionMenu_updateStatus = OptionMenu(self, updateStatus, "Confirmed", "Rejected")
         button_back = tk.Button(self, text = "Back", font = ("Courier",15), fg = "grey", height = 2, width = 6, command = lambda: master.switch_frame(NursePage))       
-        button_submitAppointment = tk.Button(self, text = "Sumbit", font = ("Courier",15), fg = "black", height = 2, width = 8, command = lambda: Appointment.updateAppointmentStatus(int(entry_updateApointmentStatusID.get()), updateStatus.get()))
+        button_submitAppointment = tk.Button(self, text = "Sumbit", font = ("Courier",15), fg = "black", height = 2, width = 8, command = lambda: self.submitID(int(entry_updateApointmentStatusID.get()), updateStatus.get()))
         #widget Positioning
         label_updateAppointmentStatus.grid(columnspan = 7,row = 0, column = 1, sticky = tk.W, padx = 15, pady = 5)
         label_updateAppointmentStatusIDInfo.grid(columnspan = 7,row = len(data)+2, column = 1, sticky = tk.W, padx = 15, pady = 5 )
@@ -496,6 +510,16 @@ class OverwriteAppointmentStatus(tk.Frame):
         optionMenu_updateStatus.grid(columnspan = 7,row = len(data)+4, column = 1, sticky = tk.N, padx = 15, pady = 5)
         button_back.grid(columnspan = 7,row = len(data)+7, column = 1, sticky = tk.W, padx = 10, pady = 5)
         button_submitAppointment.grid(columnspan = 7,row = len(data)+7, column = 1, sticky = tk.E, padx = 10, pady = 5)
+
+    def submitID(self, appointment_id, status):
+        appointmentList = Appointment.viewAppointmentsByStatusPending()
+        for appointment in appointmentList:
+           if appointment["id"] == appointment_id:
+                Appointment.updateAppointmentStatus(appointment_id,status)
+                messagebox.showinfo("SUCCESS", "Update Successfully")
+                break
+        else:
+            messagebox.showinfo("FAILED", "Please make you insert correct appointment id (must be pending appointment!")
 
 class NursePage(tk.Frame):
     def __init__(self, master):
@@ -528,7 +552,7 @@ class GenerateSummaryByName(tk.Frame):
         label_generateSummaryByName = tk.Label(self, text = "Generate Summary By Name", font = ("Courier",20),fg = "grey")
         label_generateSummaryByNameInfo = tk.Label(self, text = "Please enter a name that you wish to search: ",font = ("Courier",15),fg = "black" )
         entry_customerName = tk.Entry(self)   
-        button_submit = tk.Button(self, text = "Sumbit", font = ("Courier",15), fg = "black", height = 1, width = 8, command = lambda: self.showDetails(master,entry_customerName.get()))
+        button_submit = tk.Button(self, text = "Sumbit", font = ("Courier",15), fg = "black", height = 1, width = 8, command = lambda: self.submitID(entry_customerName.get()))
         label_ajustment = tk.Label(self, text = "")
         button_back = tk.Button(self, text = "Back", font = ("Courier",15), fg = "grey", height = 2, width = 6, command = lambda: master.switch_frame(NursePage))       
         #Widget Positioning
@@ -538,8 +562,17 @@ class GenerateSummaryByName(tk.Frame):
         entry_customerName.grid(columnspan = 8, row = 2, column = 1, sticky = tk.S, padx = 15, pady = 5)
         button_submit.grid(columnspan = 8, row = 2, column = 1, sticky = tk.E, padx = 15, pady = 5)
         button_back.grid(columnspan = 8, row = 4, column = 1, sticky = tk.W, padx = 15, pady = 5)
+    
+    def submitID(self,  customer_name):
+        appointmentList = State.getAppointmentList()
+        for appointment in appointmentList:
+           if appointment.customer_name == customer_name:
+                self.showDetails(customer_name)
+                break
+        else:
+            messagebox.showinfo("FAILED", "Please make you insert correct customer name!")
 
-    def showDetails(self, master, customer_name):
+    def showDetails(self, customer_name):
         data = [
             {
                 "id": "Appointment ID",
@@ -565,6 +598,8 @@ class GenerateSummaryByName(tk.Frame):
                     self.e.insert(tk.INSERT, data[i][j])
                     self.e.configure(state="readonly")
                 k+=1
+    
+    
         
 class GenerateSummaryByIC(tk.Frame):
     def __init__(self, master):
@@ -573,7 +608,7 @@ class GenerateSummaryByIC(tk.Frame):
         label_generateSummaryByIC = tk.Label(self, text = "Generate Summary By NRIC", font = ("Courier",20),fg = "grey")
         label_generateSummaryByICInfo = tk.Label(self, text = "Please enter NRIC number that you wish to search: ",font = ("Courier",15),fg = "black" )
         entry_customerIC = tk.Entry(self)   
-        button_submit = tk.Button(self, text = "Sumbit", font = ("Courier",15), fg = "black", height = 1, width = 8, command = lambda: self.showDetails(master, entry_customerIC.get()))
+        button_submit = tk.Button(self, text = "Sumbit", font = ("Courier",15), fg = "black", height = 1, width = 8, command = lambda: self.submitNRIC(entry_customerIC.get()))
         label_ajustment = tk.Label(self, text = "")
         button_back = tk.Button(self, text = "Back", font = ("Courier",15), fg = "grey", height = 2, width = 6, command = lambda: master.switch_frame(NursePage))       
         #Widget Positioning
@@ -584,8 +619,16 @@ class GenerateSummaryByIC(tk.Frame):
         button_submit.grid(columnspan = 8, row = 2, column = 1, sticky = tk.E, padx = 15, pady = 5)
         button_back.grid(columnspan = 8, row = 4, column = 1, sticky = tk.W, padx = 15, pady = 5)
 
+    def submitNRIC(self,  customer_nric):
+        appointmentList = State.getAppointmentList()
+        for appointment in appointmentList:
+           if appointment.customer_nric == customer_nric:
+                self.showDetails(customer_nric)
+                break
+        else:
+            messagebox.showinfo("FAILED", "Please make you insert correct customer name!")
 
-    def showDetails(self, master, customer_nric):
+    def showDetails(self, customer_nric):
         data = [
             {
                 "id": "Appointment ID",
@@ -634,26 +677,13 @@ class GenerateSummaryByTreatment(tk.Frame):
                 self.e.configure(state="readonly")
                 k+=1
 
-        # treatments = ["Extractions", "Fillings", "Repairs", "Teeth Cleaning", "Denture"]
-        # appointment_treatment = StringVar()
-        # appointment_treatment.set("Please select your treatment")
         # #Widget Creation
         label_generateSummaryByTreatment = tk.Label(self, text = "Generate Summary By Treatment Type", font = ("Courier",20),fg = "grey")
-        # label_generateSummaryByTreatmentInfo = tk.Label(self, text = "Please select treatment type that you wish to search: ",font = ("Courier",15),fg = "black" )
-        # optionMenu_appointmentTreatment = OptionMenu(self, appointment_treatment, *treatments)
-        # button_submit = tk.Button(self, text = "Sumbit", font = ("Courier",15), fg = "black", height = 1, width = 8)
-        # text_generateSummaryByName = tk.Text(self, font = ("Courier",15),bg = "#EEEEEE", height = 20, width = 60) 
-        # label_ajustment = tk.Label(self, text = "")
         button_back = tk.Button(self, text = "Back", font = ("Courier",15), fg = "grey", height = 2, width = 6, command = lambda: master.switch_frame(NursePage))       
         # #Widget Positioning
-        # label_ajustment.grid(row = 0, column = 0, sticky = tk.W, padx = 15, pady = 5)
         label_generateSummaryByTreatment.grid(row = 0, column = 1, sticky = tk.W, padx = 15, pady = 5)
-        # label_generateSummaryByTreatmentInfo.grid(row = 1, column = 1, sticky = tk.W, padx = 15, pady = 5 )
-        # optionMenu_appointmentTreatment.grid(row = 2, column = 1, sticky = tk.S, padx = 15, pady = 10)
-        button_back.grid(row = 4, column = 1, sticky = tk.W, padx = 15, pady = 5)
-        # text_generateSummaryByName.grid(row = 3, column = 1, sticky = tk.N, padx = 10, pady = 5)
-        # button_submit.grid(row = 2, column = 1, sticky = tk.E, padx = 15, pady = 5)
-
+        button_back.grid(row = len(data)+4, column = 1, sticky = tk.W, padx = 15, pady = 5)
+        
 def main():
     app = DentistApp()
     app.title('Oriental Dentist Clinic')

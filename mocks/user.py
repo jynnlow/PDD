@@ -109,31 +109,6 @@ class UserMock:
             )
         )
 
-        State.addUser(
-            Customer(
-                id = 9,
-                username = "yuetyin105",
-                password = "105105105",
-                fullName = "Ng Yuet Yin",
-                nric = "99252614689",
-                gender = "Male",
-                contactNumber = "0124856396",
-                address = "10A, Taman Forever 21, 55569, Penang, Malaysia"
-            )
-        )
-
-        State.addUser(
-            Customer(
-                id = 10,
-                username = "evelyn106",
-                password = "106106106",
-                fullName = "Evelyn Low",
-                nric = "885623142569",
-                gender = "Female",
-                contactNumber = "0102355699",
-                address = "900, Taman Nonono, 10110, Penang, Malaysia"
-            )
-        )
 
 
 
