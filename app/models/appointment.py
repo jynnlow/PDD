@@ -93,14 +93,20 @@ class Appointment:
         appointmentList = []
         for appointment in State.getAppointmentList():
             if appointment.customer_name == customer_name:
-                appointmentList.append(Appointment)
+                appointment_dict = vars(appointment)
+                appointment_dict["timeslot_time"] = Appointment.__appointment_slot[appointment.timeslot]
+                appointmentList.append(appointment_dict)
+        appointmentList.sort(key = lambda appointment: appointment["date"])        
         return appointmentList
 
     def generateAppointmentSummaryByCustomerNRIC(customer_nric):
         appointmentList = []
         for appointment in State.getAppointmentList():
             if appointment.customer_nric == customer_nric:
-                appointmentList.append(Appointment)
+                appointment_dict = vars(appointment)
+                appointment_dict["timeslot_time"] = Appointment.__appointment_slot[appointment.timeslot]
+                appointmentList.append(appointment_dict)
+        appointmentList.sort(key = lambda appointment: appointment["date"])        
         return appointmentList
 
     def generateAppointmentSummaryByDentistTreatment(treatment):

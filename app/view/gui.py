@@ -14,7 +14,7 @@ class DentistApp(tk.Tk):
     def __init__(self):
         tk.Tk.__init__(self)
         self._frame = None
-        self.switch_frame(GenerateSummaryByTreatment)
+        self.switch_frame(CustomerPage)
 
     def switch_frame(self, frame_class):
         """Destroys current frame and replaces it with a new one."""
@@ -129,16 +129,12 @@ class MakeAppointmentPage(tk.Frame):
 
         #widget creation
         label_createAppointment = tk.Label(self, text = "Make Appointment", font = ("Courier",20),fg = "grey")
-        label_appoinmentName = tk.Label(self, text = "Name:", font = ("Courier",17),fg = "black")
-        label_appointmentNRIC = tk.Label(self, text = "IC Number:", font = ("Courier",17),fg = "black")
         label_appointmentTreatment = tk.Label(self, text = "Type of treatment:", font = ("Courier",17),fg = "black")
         label_appointmentDate = tk.Label(self, text = "Appointment Date:", font = ("Courier",17),fg = "black")
         label_appointmentTime = tk.Label(self, text = "Appointment Time:", font = ("Courier",17),fg = "black")
         label_appointmentDentist = tk.Label(self, text = "Dentist:", font = ("Courier",17),fg = "black")
         label_dateAlert = tk.Label(self, text = "*Can only make appointment within next 7 days.", font = ("Courier",10),fg = "red")
         label_timeAlert = tk.Label(self, text = "*Check for appointment calendar before select timeslot.", font = ("Courier",10),fg = "red")
-        entry_appointmentName = tk.Entry(self)
-        entry_apopintmentNRIC = tk.Entry(self)
         button_submitAppointment = tk.Button(self, text = "Sumbit", font = ("Courier",15), fg = "black", height = 2, width = 8, command = lambda: self.makeAppointment(appointment_dentist.get(), appointment_treatment.get(),appointment_date.get(),timeslot[appointment_timeslot.get()]))
         button_back = tk.Button(self, text = "Back", font = ("Courier",15), fg = "grey", height = 2, width = 5, command = lambda: master.switch_frame(CustomerPage))
         button_appointmentCalendar = tk.Button(self, text = "Next 7 Days Appointment Calendar", font = ("Courier",12), fg = "black", height = 2, width = 40, command = lambda: master.switch_frame(CalendarPage))
@@ -150,16 +146,12 @@ class MakeAppointmentPage(tk.Frame):
         #widget positioning
         label_createAppointment.grid (row = 0, column = 1, sticky = tk.W, padx = 10, pady = 10)
         label_ajustment.grid(row = 1, column = 0, sticky = tk.N, padx =  2)
-        label_appoinmentName.grid(row = 2, column = 1, sticky = tk.W, padx = 15, pady = 10)
-        label_appointmentNRIC.grid(row = 3, column = 1, sticky = tk.W, padx = 15, pady = 10)
         label_appointmentTreatment.grid(row = 4, column = 1, sticky = tk.W, padx = 15, pady = 10)
         label_appointmentDentist.grid(row = 5, column = 1, sticky = tk.W, padx = 15, pady = 10)
         label_appointmentDate.grid(row = 6, column = 1, sticky = tk.W, padx = 15, pady = 0)
         label_dateAlert.grid (row = 7, column = 1, sticky= tk.W, padx = 15, pady = 0)
         label_appointmentTime.grid(row = 8, column = 1, sticky = tk.W, padx = 15, pady = 0)
         label_timeAlert.grid (row = 9, column = 1, sticky= tk.W, padx = 15, pady = 0)  
-        entry_appointmentName.grid(row = 2, column = 2, sticky = tk.W, padx = 15, pady = 10)
-        entry_apopintmentNRIC.grid(row = 3, column = 2, sticky = tk.W, padx = 15, pady = 10)
         optionMenu_appointmentTreatment.grid(row = 4, column = 2, sticky = tk.W, padx = 15, pady = 10)
         optionMenu_appointmentDentist.grid(row = 5, column = 2, sticky = tk.W, padx = 15, pady = 10)
         optionMenu_appointmentDate.grid(row = 6, column = 2, sticky = tk.W, padx = 15, pady = 15)
@@ -536,19 +528,44 @@ class GenerateSummaryByName(tk.Frame):
         label_generateSummaryByName = tk.Label(self, text = "Generate Summary By Name", font = ("Courier",20),fg = "grey")
         label_generateSummaryByNameInfo = tk.Label(self, text = "Please enter a name that you wish to search: ",font = ("Courier",15),fg = "black" )
         entry_customerName = tk.Entry(self)   
-        button_submit = tk.Button(self, text = "Sumbit", font = ("Courier",15), fg = "black", height = 1, width = 8)
-        text_generateSummaryByName = tk.Text(self, font = ("Courier",15),bg = "#EEEEEE", height = 20, width = 60) 
+        button_submit = tk.Button(self, text = "Sumbit", font = ("Courier",15), fg = "black", height = 1, width = 8, command = lambda: self.showDetails(master,entry_customerName.get()))
         label_ajustment = tk.Label(self, text = "")
         button_back = tk.Button(self, text = "Back", font = ("Courier",15), fg = "grey", height = 2, width = 6, command = lambda: master.switch_frame(NursePage))       
         #Widget Positioning
-        label_ajustment.grid(row = 0, column = 0, sticky = tk.W, padx = 15, pady = 5)
-        label_generateSummaryByName.grid(row = 0, column = 1, sticky = tk.W, padx = 15, pady = 5)
-        label_generateSummaryByNameInfo.grid(row = 1, column = 1, sticky = tk.W, padx = 15, pady = 5 )
-        entry_customerName.grid(row = 2, column = 1, sticky = tk.S, padx = 15, pady = 5)
-        button_back.grid(row = 4, column = 1, sticky = tk.W, padx = 15, pady = 5)
-        text_generateSummaryByName.grid(row = 3, column = 1, sticky = tk.N, padx = 10, pady = 5)
-        button_submit.grid(row = 2, column = 1, sticky = tk.E, padx = 15, pady = 5)
+        label_ajustment.grid(columnspan = 8, row = 0, column = 0, sticky = tk.W, padx = 15, pady = 5)
+        label_generateSummaryByName.grid(columnspan = 8, row = 0, column = 1, sticky = tk.W, padx = 15, pady = 5)
+        label_generateSummaryByNameInfo.grid(columnspan = 8, row = 1, column = 1, sticky = tk.W, padx = 15, pady = 5 )
+        entry_customerName.grid(columnspan = 8, row = 2, column = 1, sticky = tk.S, padx = 15, pady = 5)
+        button_submit.grid(columnspan = 8, row = 2, column = 1, sticky = tk.E, padx = 15, pady = 5)
+        button_back.grid(columnspan = 8, row = 4, column = 1, sticky = tk.W, padx = 15, pady = 5)
 
+    def showDetails(self, master, customer_name):
+        data = [
+            {
+                "id": "Appointment ID",
+                "date": "Date",
+                "timeslot_time": "Time Slot",
+                "customer_name": "Customer Name",
+                "customer_nric" : "NRIC",
+                "dentist": "Dentist",
+                "treatment": "Treatment",
+                "status": "Status",
+            }
+        ]
+        data.extend(Appointment.generateAppointmentSummaryByCustomerName(customer_name))
+        for i in range(len(data)):
+            k = 0
+            for j in data[0]:
+                if i == 0:
+                    self.e = Entry(self, width=15, fg="black", font=("Courier", 11, "bold"))
+                else:
+                    self.e = Entry(self, width=15, fg="black", font=("Courier", 11))
+                if j == "id" or j == "date" or j == "timeslot_time" or j == "customer_name" or j == "customer_nric" or j == "dentist" or j == "treatment" or j == "status":
+                    self.e.grid(row=i+6, column=k, sticky = tk.N)
+                    self.e.insert(tk.INSERT, data[i][j])
+                    self.e.configure(state="readonly")
+                k+=1
+        
 class GenerateSummaryByIC(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
@@ -556,18 +573,44 @@ class GenerateSummaryByIC(tk.Frame):
         label_generateSummaryByIC = tk.Label(self, text = "Generate Summary By NRIC", font = ("Courier",20),fg = "grey")
         label_generateSummaryByICInfo = tk.Label(self, text = "Please enter NRIC number that you wish to search: ",font = ("Courier",15),fg = "black" )
         entry_customerIC = tk.Entry(self)   
-        button_submit = tk.Button(self, text = "Sumbit", font = ("Courier",15), fg = "black", height = 1, width = 8)
-        text_generateSummaryByName = tk.Text(self, font = ("Courier",15),bg = "#EEEEEE", height = 20, width = 60) 
+        button_submit = tk.Button(self, text = "Sumbit", font = ("Courier",15), fg = "black", height = 1, width = 8, command = lambda: self.showDetails(master, entry_customerIC.get()))
         label_ajustment = tk.Label(self, text = "")
         button_back = tk.Button(self, text = "Back", font = ("Courier",15), fg = "grey", height = 2, width = 6, command = lambda: master.switch_frame(NursePage))       
         #Widget Positioning
-        label_ajustment.grid(row = 0, column = 0, sticky = tk.W, padx = 15, pady = 5)
-        label_generateSummaryByIC.grid(row = 0, column = 1, sticky = tk.W, padx = 15, pady = 5)
-        label_generateSummaryByICInfo.grid(row = 1, column = 1, sticky = tk.W, padx = 15, pady = 5 )
-        entry_customerIC.grid(row = 2, column = 1, sticky = tk.S, padx = 15, pady = 5)
-        button_back.grid(row = 4, column = 1, sticky = tk.W, padx = 15, pady = 5)
-        text_generateSummaryByName.grid(row = 3, column = 1, sticky = tk.N, padx = 10, pady = 5)
-        button_submit.grid(row = 2, column = 1, sticky = tk.E, padx = 15, pady = 5)
+        label_ajustment.grid(columnspan = 8, row = 0, column = 0, sticky = tk.W, padx = 15, pady = 5)
+        label_generateSummaryByIC.grid(columnspan = 8, row = 0, column = 1, sticky = tk.W, padx = 15, pady = 5)
+        label_generateSummaryByICInfo.grid(columnspan = 8, row = 1, column = 1, sticky = tk.W, padx = 15, pady = 5 )
+        entry_customerIC.grid(columnspan = 8, row = 2, column = 1, sticky = tk.S, padx = 15, pady = 5)
+        button_submit.grid(columnspan = 8, row = 2, column = 1, sticky = tk.E, padx = 15, pady = 5)
+        button_back.grid(columnspan = 8, row = 4, column = 1, sticky = tk.W, padx = 15, pady = 5)
+
+
+    def showDetails(self, master, customer_nric):
+        data = [
+            {
+                "id": "Appointment ID",
+                "date": "Date",
+                "timeslot_time": "Time Slot",
+                "customer_name": "Customer Name",
+                "customer_nric" : "NRIC",
+                "dentist": "Dentist",
+                "treatment": "Treatment",
+                "status": "Status",
+            }
+        ]
+        data.extend(Appointment.generateAppointmentSummaryByCustomerNRIC(customer_nric))
+        for i in range(len(data)):
+            k = 0
+            for j in data[0]:
+                if i == 0:
+                    self.e = Entry(self, width=15, fg="black", font=("Courier", 11, "bold"))
+                else:
+                    self.e = Entry(self, width=15, fg="black", font=("Courier", 11))
+                if j == "id" or j == "date" or j == "timeslot_time" or j == "customer_name" or j == "customer_nric" or j == "dentist" or j == "treatment" or j == "status":
+                    self.e.grid(row=i+6, column=k, sticky = tk.N)
+                    self.e.insert(tk.INSERT, data[i][j])
+                    self.e.configure(state="readonly")
+                k+=1
 
 class GenerateSummaryByTreatment(tk.Frame):
     def __init__(self, master):
@@ -595,19 +638,19 @@ class GenerateSummaryByTreatment(tk.Frame):
         # appointment_treatment = StringVar()
         # appointment_treatment.set("Please select your treatment")
         # #Widget Creation
-        # label_generateSummaryByTreatment = tk.Label(self, text = "Generate Summary By Treatment Type", font = ("Courier",20),fg = "grey")
+        label_generateSummaryByTreatment = tk.Label(self, text = "Generate Summary By Treatment Type", font = ("Courier",20),fg = "grey")
         # label_generateSummaryByTreatmentInfo = tk.Label(self, text = "Please select treatment type that you wish to search: ",font = ("Courier",15),fg = "black" )
         # optionMenu_appointmentTreatment = OptionMenu(self, appointment_treatment, *treatments)
         # button_submit = tk.Button(self, text = "Sumbit", font = ("Courier",15), fg = "black", height = 1, width = 8)
         # text_generateSummaryByName = tk.Text(self, font = ("Courier",15),bg = "#EEEEEE", height = 20, width = 60) 
         # label_ajustment = tk.Label(self, text = "")
-        # button_back = tk.Button(self, text = "Back", font = ("Courier",15), fg = "grey", height = 2, width = 6, command = lambda: master.switch_frame(NursePage))       
+        button_back = tk.Button(self, text = "Back", font = ("Courier",15), fg = "grey", height = 2, width = 6, command = lambda: master.switch_frame(NursePage))       
         # #Widget Positioning
         # label_ajustment.grid(row = 0, column = 0, sticky = tk.W, padx = 15, pady = 5)
-        # label_generateSummaryByTreatment.grid(row = 0, column = 1, sticky = tk.W, padx = 15, pady = 5)
+        label_generateSummaryByTreatment.grid(row = 0, column = 1, sticky = tk.W, padx = 15, pady = 5)
         # label_generateSummaryByTreatmentInfo.grid(row = 1, column = 1, sticky = tk.W, padx = 15, pady = 5 )
         # optionMenu_appointmentTreatment.grid(row = 2, column = 1, sticky = tk.S, padx = 15, pady = 10)
-        # button_back.grid(row = 4, column = 1, sticky = tk.W, padx = 15, pady = 5)
+        button_back.grid(row = 4, column = 1, sticky = tk.W, padx = 15, pady = 5)
         # text_generateSummaryByName.grid(row = 3, column = 1, sticky = tk.N, padx = 10, pady = 5)
         # button_submit.grid(row = 2, column = 1, sticky = tk.E, padx = 15, pady = 5)
 
